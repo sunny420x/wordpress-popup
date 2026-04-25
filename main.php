@@ -277,8 +277,8 @@ function popup_settings_page()
                 }
                 ?>
                 <hr>
-                <p>Github Repository: <a href="https://github.com/sunny420x/wordpress-popup"
-                        target="_blank">github.com/sunny420x/wordpress-popup</a></p>
+                <p>Github Repository: <a href="https://github.com/sunny420x/wordpress-image-popup"
+                        target="_blank">github.com/sunny420x/wordpress-image-popup</a></p>
                 <script type="text/javascript">
                     jQuery(document).ready(function ($) {
                         $('#upload_image_button').click(function (e) {
