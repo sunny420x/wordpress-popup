@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Image Popup with Cookie
+ * Plugin Name: Sunny's Image Popup with Cookie
  * Description: แสดง Pop-up รูปภาพพร้อมปุ่มปิด และจำ Cookie 7 วัน
  * Version: 1.0
  * Author: Jirakit Pawnsakunrungrot
@@ -44,10 +44,18 @@ function popup_settings_page()
 
     if ( isset($_GET['saveProfile']) ) {
         
-        // 1. ดึงข้อมูลทั้งหมดที่มีอยู่ตอนนี้มาก่อน
+        //ดึงข้อมูลทั้งหมดที่มีอยู่ตอนนี้มาก่อน
         $profiles = get_option('popup_profiles', array());
         $profile_name_to_find = $_GET['saveProfile'];
         $found = false;
+
+        // เปลี่ยนตัวอื่นให้เป็น "no"
+        if ($_POST['popup_enable'] === 'yes' ) {
+            foreach ( $profiles as &$p ) {
+                $p['enable'] = 'no';
+            }
+            unset($p);
+        }
 
         foreach ( $profiles as &$profile ) {
             if ( $profile['name'] === $profile_name_to_find ) {
@@ -94,6 +102,14 @@ function popup_settings_page()
             'cookie_name'          => sanitize_title($_POST['popup_cookie_name']),
             'width'          => sanitize_title($_POST['width']),
         );
+
+        // เปลี่ยนตัวอื่นให้เป็น "no"
+        if ($_POST['popup_enable'] === 'yes' ) {
+            foreach ( $profiles as &$p ) {
+                $p['enable'] = 'no';
+            }
+            unset($p);
+        }
 
         update_option('popup_profiles', $profiles);
         $profile_name = sanitize_text_field($_POST['popup_name']);
@@ -152,7 +168,8 @@ function popup_settings_page()
                     <?php
                     foreach ($profiles as $profile) {
                         ?>
-                        <li onclick="window.location.href='admin.php?page=wordpress-popup-settings&profile=<?= $profile['name'] ?>'"><?php if($profile['enabled']) { ?>
+                        <li onclick="window.location.href='admin.php?page=wordpress-popup-settings&profile=<?= $profile['name'] ?>'">
+                            <?php if($profile['enable'] == "yes") { ?>
                             <span style="color: green; margin-right: 10px;">●</span>
                             <?php } else { ?>
                             <span style="color: red; margin-right: 10px;">●</span><?php } ?> 
@@ -165,7 +182,6 @@ function popup_settings_page()
             <div>
                 <h1>✨ ระบบ Popup สำหรับ Wordpress</h1>
                 <p>ระบบ Popup แสดงรูปภาพ เช่น โมษณา สิทธิพิเศษ Artwork เทศกาลต่าง ๆ เป็นต้น ระบบจะแสดงแค่หน้า homepage</p>
-                <strong>* โปรดเลือกแสดง Popup แค่ 1 Profile เท่านั้น</strong><br>
                 <hr>
                 <?php
                 $selected_profile = array_find($profiles, function ($profile) {
