@@ -154,7 +154,7 @@ function popup_settings_page()
             margin: 0;
         }
         ul.popup_profile_list li:hover {
-            background: #eee;
+            background: #fff;
             cursor: pointer;
         }
         .leftside {
